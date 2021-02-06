@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Temperature Hot</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background: url(images/bg-image.jpg) no-repeat;
+            background-size: cover;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <form class="col-md-6 m-auto py-5">
+            <div class="input-group mb-3">
+                <input id="input-city" type="text" class="form-control" placeholder="Enter a location for Weather ...">
+                <div class="input-group-append">
+                    <button id="search-btn" type="button" class="btn btn-danger">Search</button>
+                </div>
+            </div>
+        </form>
+        <div class="weather-status text-white text-center">
+            <div>
+                <img src="https://openweathermap.org/img/wn/02d@2x.png" alt="" id="weather-icon">
+            </div>
+            <h1 id="city-name">Dhaka</h1>
+            <h3><span id="current-temp">38.06</span>&deg;C</h3>
+            <h1 class="lead"> <span id="current-status">Clouds</span> </h1>
+        </div>
+    </div>
+
+</body>
+
+
+<script>
+
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=Dhaka
+        &APPID=d689b0bdfa4663531e385065f408c560`)
+        .then(res => res.json())
+        .then(data => {
+            // console.log(data);
+            document.getElementById("city-name").innerText = data.name;
+            document.getElementById("current-temp").innerText = Math.round(data.main.temp - 273.15);
+            document.getElementById("current-status").innerText = data.weather[0].main;
+
+            const icon = data.weather[0].icon;
+            const weatherIcon = document.getElementById("weather-icon");
+            weatherIcon.src = `https://openweathermap.org/img/wn/${icon}@2x.png`;
+        })
+
+    const searchBtn = document.getElementById("search-btn");
+    searchBtn.addEventListener("click", function () {
+        const inputCity = document.getElementById("input-city").value;
+        // console.log(inputCity);
+
+        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${inputCity}
+        &APPID=d689b0bdfa4663531e385065f408c560`)
+            .then(res => res.json())
+            .then(data => {
+                // console.log(data.name);
+                document.getElementById("city-name").innerText = data.name;
+                document.getElementById("current-temp").innerText = Math.round(data.main.temp - 273.15);
+                document.getElementById("current-status").innerText = data.weather[0].main;
+
+                const icon = data.weather[0].icon;
+                // console.log(icon);
+                const weatherIcon = document.getElementById("weather-icon");
+                weatherIcon.src = `https://openweathermap.org/img/wn/${icon}@2x.png`;
+                // console.log(weatherIcon);
+            })
+    })
+</script>
+
+</html>
